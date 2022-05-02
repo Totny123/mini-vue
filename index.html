@@ -15,8 +15,8 @@
   <body>
     <div id="app"></div>
     <script>
-      const VNode = h("div", { class: "box" }, [
-        h("div", null, "1"),
+      const VNode2 = h("div", { class: "box" }, [
+        h("div", { class: "children" }, "1"),
         h(
           "button",
           {
@@ -27,7 +27,15 @@
           "+1"
         ),
       ]);
+      const VNode = h("div", { id: "newId" }, [
+        h("div", { class: "children" }, "孩子一"),
+        h("h2", null, "h2"),
+        h("h1", null, "删除的节点"),
+      ]);
       mount(VNode, document.querySelector("#app"));
+      setTimeout(() => {
+        patch(VNode, VNode2);
+      }, 2000);
     </script>
   </body>
 </html>
