@@ -52,12 +52,12 @@ function reactive(obj) {
       return target[key];
     },
     set(target, key, newValue) {
+      //应该先把数据修改了，才执行通知。
+      target[key] = newValue;
       //获取属性对应的dep
       const dep = getDep(target, key);
       //调用notify()，调用所有effect，从而实现响应式
       dep.notify();
-      //在捕获器中使用target、obj，都不会循环触发。但还是建议使用Reflect操作对象。
-      target[key] = newValue;
     },
   });
 }

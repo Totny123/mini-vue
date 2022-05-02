@@ -12,31 +12,36 @@
     </style>
     <script src="./renderer.js"></script>
     <script src="./reactive.js"></script>
+    <script src="./index.js"></script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="root"></div>
     <script>
-      const VNode2 = h("div", { class: "box" }, [
-        h("div", { class: "children" }, "1"),
-        h(
-          "button",
-          {
-            onClick: () => {
-              console.log("+1");
-            },
-          },
-          "+1"
-        ),
-      ]);
-      const VNode = h("div", { id: "newId" }, [
-        h("div", { class: "children" }, "孩子一"),
-        h("h2", null, "h2"),
-        h("h1", null, "删除的节点"),
-      ]);
-      mount(VNode, document.querySelector("#app"));
-      setTimeout(() => {
-        patch(VNode, VNode2);
-      }, 2000);
+      //data和clickFn写在外面的原因
+      //1. 如果clickFn写在render()里面，每次重新render()就会产生新的函数,所以要写在外面
+      //2. clickFn在外面了，获取不到data,所以data也要写在外面。
+      const data = reactive({
+        counter: 0,
+      });
+      const clickFn = () => {
+        data.counter += 1;
+      };
+      const app = createApp({
+        data,
+        render() {
+          return h("div", { class: "box" }, [
+            h("div", null, `${this.data.counter}`),
+            h(
+              "button",
+              {
+                onClick: clickFn,
+              },
+              "+1"
+            ),
+          ]);
+        },
+      });
+      app.mount("#root");
     </script>
   </body>
 </html>
